@@ -1,4 +1,4 @@
-import { GenerationSettings } from '@/components/survey/QuestionSettings';
+import { GenerationSettings } from "@/components/survey/QuestionSettings";
 
 export async function streamQuestions(
   category: string,
@@ -6,10 +6,10 @@ export async function streamQuestions(
   settings: GenerationSettings,
   signal?: AbortSignal
 ): Promise<ReadableStream<string>> {
-  const response = await fetch('/api/generate', {
-    method: 'POST',
+  const response = await fetch("/api/generate", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       category,
@@ -21,8 +21,8 @@ export async function streamQuestions(
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || 'Failed to generate questions');
+    throw new Error(error.message || "Failed to generate questions");
   }
 
-  return response.body!;
+  return response.body! as any;
 }
