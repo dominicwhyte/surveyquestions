@@ -24,12 +24,12 @@ export function MainNav() {
 
           <div className="flex items-center space-x-4">
             <Link href="/blog">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className={cn(
                   "gap-2",
-                  pathname.startsWith("/blog") && "bg-primary/5 text-primary"
+                  pathname?.startsWith("/blog") && "bg-primary/5 text-primary"
                 )}
               >
                 <BookOpen className="h-5 w-5" />
