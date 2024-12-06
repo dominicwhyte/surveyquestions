@@ -12,7 +12,7 @@ export function FilloutCTA({ surveyType }: FilloutCTAProps) {
   return (
     <div className="mt-16 text-center">
       <Link 
-        href="https://fillout.com/ai-form-builder?ref=surveyquestions" 
+        href="https://www.fillout.com/ai-survey-maker?ref=surveyquestions" 
         target="_blank" 
         rel="noopener noreferrer"
         className="inline-block"
