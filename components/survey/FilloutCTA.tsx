@@ -20,7 +20,7 @@ export function FilloutCTA({ surveyType }: FilloutCTAProps) {
         <Button 
           variant="default" 
           size="lg" 
-          className="bg-[#FFC738] hover:bg-[#FFD668] text-black gap-3 px-6 py-6 text-lg group transition-all duration-200"
+          className="bg-[#FFC738] hover:bg-[#FFD668] text-black gap-3 px-8 py-7 text-lg group transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
         >
           <span>Create a free {surveyType} survey with</span>
           <FilloutLogo />

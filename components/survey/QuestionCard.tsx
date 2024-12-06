@@ -26,14 +26,19 @@ export function QuestionCard({ question, index }: QuestionCardProps) {
   };
 
   return (
-    <Card className="p-6 hover:shadow-md transition-shadow duration-200">
+    <Card className="group p-6 hover:shadow-lg transition-all duration-300 border-neutral-200/60 hover:border-primary/20 bg-gradient-to-br from-white to-neutral-50/50">
       <div className="flex justify-between items-start gap-4">
-        <p className="text-lg text-gray-800 flex-grow">{question}</p>
+        <div className="flex items-start gap-4 flex-grow">
+          <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-medium">
+            {index + 1}
+          </span>
+          <p className="text-lg text-gray-800 pt-1">{question}</p>
+        </div>
         <Button
           variant="outline"
           size="icon"
           onClick={copyToClipboard}
-          className="flex-shrink-0"
+          className="flex-shrink-0 hover:bg-primary/5 transition-colors duration-200"
         >
           {copied ? (
             <Check className="h-4 w-4 text-green-500" />

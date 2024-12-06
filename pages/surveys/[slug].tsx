@@ -55,16 +55,20 @@ export default function SurveyQuestionsPage({
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
       </Head>
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12">
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 via-gray-50 to-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 space-y-6">
+            <Link href="/" className="inline-flex items-center text-sm text-gray-600 hover:text-primary transition-colors mb-4">
+              <Home className="h-4 w-4 mr-2" />
+              Back to categories
+            </Link>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">{categoryTitle}</h1>
             <CategoryDescription slug={categorySlug} />
             <Button
               onClick={regenerateQuestions}
               variant="outline"
               size="lg"
-              className="gap-2"
+              className="gap-2 bg-white hover:bg-primary/5 transition-all duration-200"
               disabled={isRegenerating}
             >
               <RefreshCw className={`h-4 w-4 ${isRegenerating ? 'animate-spin' : ''}`} />
@@ -72,7 +76,7 @@ export default function SurveyQuestionsPage({
             </Button>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {questions.map((question, index) => (
               <QuestionCard key={`${index}-${question}`} question={question} index={index} />
             ))}
@@ -80,9 +84,9 @@ export default function SurveyQuestionsPage({
 
           <FilloutCTA surveyType={categoryTitle.toLowerCase()} />
 
-          <div className="mt-12 text-center">
+          <div className="mt-16 text-center">
             <Link href="/">
-              <Button variant="outline" size="lg" className="gap-2">
+              <Button variant="outline" size="lg" className="gap-2 bg-white hover:bg-primary/5">
                 <Home className="h-4 w-4" />
                 View all question categories
               </Button>
