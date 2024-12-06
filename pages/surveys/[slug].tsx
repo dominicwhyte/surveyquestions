@@ -1,20 +1,22 @@
 "use client";
 
-import { GetStaticProps, GetStaticPaths } from "next";
-import Head from "next/head";
+import { GetStaticProps, GetStaticPaths } from 'next';
+import Head from 'next/head';
 import { QuestionCard } from "@/components/survey/QuestionCard";
 import { FilloutCTA } from "@/components/survey/FilloutCTA";
 import { CategoryDescription } from "@/components/survey/CategoryDescription";
-import { allQuestions, getRandomQuestions } from "@/lib/questions";
-import {
-  surveyCategories,
-  type SurveyCategorySlug,
-} from "@/lib/survey-categories";
+import { QuestionBank } from "@/components/survey/QuestionBank";
+import { defaultQuestions, getRandomQuestions } from "@/lib/questions";
+import { surveyCategories, type SurveyCategorySlug } from "@/lib/survey-categories";
 import { formatSlug } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Home, RefreshCw } from "lucide-react";
-import { useState } from "react";
+import { Home } from "lucide-react";
+import { useState, useRef, useCallback } from 'react';
+import { streamQuestions } from '@/lib/openai';
+import { useToast } from "@/hooks/use-toast";
+import type { GenerationSettings } from '@/components/survey/QuestionSettings';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface SurveyQuestionsPageProps {
   initialQuestions: string[];
@@ -24,37 +26,83 @@ interface SurveyQuestionsPageProps {
   metaDescription: string;
 }
 
-export default function SurveyQuestionsPage({
-  initialQuestions,
-  categoryTitle,
+export default function SurveyQuestionsPage({ 
+  initialQuestions, 
+  categoryTitle, 
   categorySlug,
   metaTitle,
-  metaDescription,
+  metaDescription
 }: SurveyQuestionsPageProps) {
-  const [questions, setQuestions] = useState(initialQuestions);
-  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [questions, setQuestions] = useState<string[]>(initialQuestions);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const regenerateQuestions = () => {
-    setIsRegenerating(true);
-    const newQuestions = getRandomQuestions(categorySlug);
-    setQuestions(newQuestions);
-    setTimeout(() => setIsRegenerating(false), 500);
-  };
+  const generateQuestions = useCallback(async (
+    topic: string,
+    settings: GenerationSettings
+  ) => {
+    try {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      
+      abortControllerRef.current = new AbortController();
+      setIsGenerating(true);
+      setQuestions([]);
 
-  if (questions.length === 0) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Category not found
-          </h1>
-          <p className="text-gray-600">
-            The requested survey category does not exist.
-          </p>
-        </div>
-      </div>
-    );
-  }
+      const stream = await streamQuestions(
+        categorySlug,
+        topic,
+        settings,
+        abortControllerRef.current.signal
+      );
+
+      const reader = stream.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        
+        buffer += decoder.decode(value);
+        const lines = buffer.split('\nQ:');
+        buffer = lines.pop() || '';
+        
+        const newQuestions = lines
+          .map(q => q.trim())
+          .filter(Boolean)
+          .map(q => q.startsWith('Q:') ? q : `Q: ${q}`);
+
+        if (newQuestions.length > 0) {
+          setQuestions(prev => [...prev, ...newQuestions]);
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+      }
+
+      if (buffer) {
+        const finalQuestion = buffer.trim();
+        if (finalQuestion) {
+          setQuestions(prev => [...prev, finalQuestion.startsWith('Q:') ? finalQuestion : `Q: ${finalQuestion}`]);
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        return;
+      }
+      
+      console.error('Error generating questions:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : 'Failed to generate questions',
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+      abortControllerRef.current = null;
+    }
+  }, [categorySlug, toast]);
 
   return (
     <>
@@ -62,58 +110,56 @@ export default function SurveyQuestionsPage({
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
       </Head>
-      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 via-gray-50 to-white py-16">
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 via-gray-50 to-white py-8 sm:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 space-y-6">
-            <Link
-              href="/"
-              className="inline-flex items-center text-sm text-gray-600 hover:text-primary transition-colors mb-4"
-            >
+          <div className="text-center mb-8 sm:mb-12 space-y-4 sm:space-y-6">
+            <Link href="/" className="inline-flex items-center text-sm text-gray-600 hover:text-primary transition-colors">
               <Home className="h-4 w-4 mr-2" />
               Home
             </Link>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              {categoryTitle}
-            </h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{categoryTitle}</h1>
             <CategoryDescription slug={categorySlug} />
-            <Button
-              onClick={regenerateQuestions}
-              variant="outline"
-              size="lg"
-              className="gap-2 bg-white hover:bg-primary/5 transition-all duration-200"
-              disabled={isRegenerating}
-            >
-              <RefreshCw
-                className={`h-4 w-4 ${isRegenerating ? "animate-spin" : ""}`}
-              />
-              Generate new questions
-            </Button>
+            
+            <QuestionBank 
+              categorySlug={categorySlug}
+              categoryTitle={categoryTitle}
+              onGenerate={generateQuestions}
+            />
           </div>
 
-          <div className="space-y-6">
-            {questions.map((question, index) => (
-              <QuestionCard
-                key={`${index}-${question}`}
-                question={question}
-                index={index}
-              />
-            ))}
+          <div className="space-y-4 sm:space-y-6">
+            <AnimatePresence mode="popLayout">
+              {questions.map((question, index) => (
+                <QuestionCard 
+                  key={`${index}-${question.substring(0, 20)}`} 
+                  question={question.replace(/^Q:\s*/, '')} 
+                  index={index} 
+                />
+              ))}
+            </AnimatePresence>
           </div>
 
-          <FilloutCTA surveyType={categoryTitle.toLowerCase()} />
-
-          <div className="mt-16 text-center">
-            <Link href="/">
-              <Button
-                variant="outline"
-                size="lg"
-                className="gap-2 bg-white hover:bg-primary/5"
+          <AnimatePresence>
+            {!isGenerating && questions.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
               >
-                <Home className="h-4 w-4" />
-                View all question categories
-              </Button>
-            </Link>
-          </div>
+                <FilloutCTA surveyType={categoryTitle.toLowerCase()} />
+
+                <div className="mt-8 sm:mt-16 text-center">
+                  <Link href="/">
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto gap-2 bg-white hover:bg-primary/5">
+                      <Home className="h-4 w-4" />
+                      View all question categories
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </>
@@ -133,7 +179,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = params?.slug as SurveyCategorySlug;
-  const category = surveyCategories.find((c) => c.slug === slug);
+  const category = surveyCategories.find(c => c.slug === slug);
   const initialQuestions = getRandomQuestions(slug);
   const categoryTitle = formatSlug(slug);
 
@@ -143,7 +189,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       categoryTitle,
       categorySlug: slug,
       metaTitle: category?.metaTitle || categoryTitle,
-      metaDescription: category?.metaDescription || "",
+      metaDescription: category?.metaDescription || '',
     },
   };
 };

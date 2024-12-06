@@ -24,7 +24,9 @@ export function CategoryCard({ category }: CategoryCardProps) {
             </h2>
             <p className="text-gray-600 line-clamp-2">{category.description}</p>
             <div className="flex items-center justify-between pt-2">
-              <span className="text-sm font-medium text-gray-500">{category.count}</span>
+              <span className="text-sm font-medium text-gray-500">
+                {category.count}
+              </span>
               <ArrowRight className="h-5 w-5 text-primary transform group-hover:translate-x-1 transition-transform duration-200" />
             </div>
           </div>
