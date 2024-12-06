@@ -13,7 +13,7 @@ export default function BlogIndex() {
           content="Learn survey best practices, methodology, and tips from industry experts. Comprehensive guides on creating effective surveys and analyzing results."
         />
       </Head>
-      
+
       <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 via-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-16">
@@ -21,8 +21,8 @@ export default function BlogIndex() {
               Survey Best Practices
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Expert insights and guides to help you create more effective surveys,
-              increase response rates, and gather better data.
+              Expert insights and guides to help you create more effective
+              surveys, increase response rates, and gather better data.
             </p>
           </div>
 
@@ -31,7 +31,7 @@ export default function BlogIndex() {
               <BlogCard
                 key={post.slug}
                 post={post}
-                author={authors[post.author]}
+                author={authors[post.author as any]}
                 index={index}
               />
             ))}
