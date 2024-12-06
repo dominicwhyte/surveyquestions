@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 interface TableOfContentsProps {
   content: string;
@@ -14,16 +14,16 @@ interface TOCItem {
 }
 
 export function TableOfContents({ content }: TableOfContentsProps) {
-  const [activeId, setActiveId] = useState<string>('');
+  const [activeId, setActiveId] = useState<string>("");
   const [headings, setHeadings] = useState<TOCItem[]>([]);
 
   useEffect(() => {
     // Extract headings from markdown content
     const matches = content.match(/#{2,3}\s+(.+)/g) || [];
     const items = matches.map((heading) => {
-      const level = heading.match(/#{2,3}/)?.[0].length - 1;
-      const text = heading.replace(/#{2,3}\s+/, '');
-      const id = text.toLowerCase().replace(/[^\w]+/g, '-');
+      const level = (heading.match(/#{2,3}/)?.[0]?.length ?? 2) - 1;
+      const text = heading.replace(/#{2,3}\s+/, "");
+      const id = text.toLowerCase().replace(/[^\w]+/g, "-");
       return { id, text, level };
     });
     setHeadings(items);
@@ -38,10 +38,10 @@ export function TableOfContents({ content }: TableOfContentsProps) {
           }
         });
       },
-      { rootMargin: '0px 0px -80% 0px' }
+      { rootMargin: "0px 0px -80% 0px" }
     );
 
-    document.querySelectorAll('h2, h3').forEach((heading) => {
+    document.querySelectorAll("h2, h3").forEach((heading) => {
       observer.observe(heading);
     });
 
@@ -65,7 +65,7 @@ export function TableOfContents({ content }: TableOfContentsProps) {
             <a
               href={`#${heading.id}`}
               className={`block text-gray-600 hover:text-primary transition-colors ${
-                activeId === heading.id ? 'text-primary font-medium' : ''
+                activeId === heading.id ? "text-primary font-medium" : ""
               }`}
             >
               {heading.text}

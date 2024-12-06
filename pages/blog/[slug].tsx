@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
 
-  const author = authors[post.author];
+  const author = authors[post.author as any];
 
   return {
     props: {
