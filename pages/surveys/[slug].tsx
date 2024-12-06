@@ -12,12 +12,12 @@ import {
   type SurveyCategorySlug,
 } from "@/lib/survey-categories";
 import { formatSlug } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Home } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 import { streamQuestions } from "@/lib/openai";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Home } from "lucide-react";
 import type { GenerationSettings } from "@/components/survey/QuestionSettings";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -124,13 +124,6 @@ export default function SurveyQuestionsPage({
       <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 via-gray-50 to-white py-8 sm:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 space-y-4 sm:space-y-6">
-            <Link
-              href="/"
-              className="inline-flex items-center text-sm text-gray-600 hover:text-primary transition-colors"
-            >
-              <Home className="h-4 w-4 mr-2" />
-              Home
-            </Link>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
               {categoryTitle}
             </h1>
@@ -164,19 +157,6 @@ export default function SurveyQuestionsPage({
                 transition={{ duration: 0.3 }}
               >
                 <FilloutCTA surveyType={categoryTitle.toLowerCase()} />
-
-                <div className="mt-8 sm:mt-16 text-center">
-                  <Link href="/">
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="w-full sm:w-auto gap-2 bg-white hover:bg-primary/5"
-                    >
-                      <Home className="h-4 w-4" />
-                      View all question categories
-                    </Button>
-                  </Link>
-                </div>
               </motion.div>
             )}
           </AnimatePresence>
