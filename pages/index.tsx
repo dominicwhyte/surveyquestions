@@ -1,5 +1,5 @@
-import { CategoryCard } from "@/components/survey/CategoryCard";
-import { surveyCategories } from "@/lib/survey-categories";
+import { CategoryGroup } from "@/components/survey/CategoryGroup";
+import { surveyCategories, categoryGroups } from "@/lib/survey-categories";
 
 export default function Home() {
   return (
@@ -7,7 +7,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16 space-y-6">
           <div className="inline-block">
-            <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-primary/10 text-primary mb-4">
+            <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-indigo-50 text-indigo-600 mb-4">
               Free Survey Templates
             </span>
           </div>
@@ -15,15 +15,24 @@ export default function Home() {
             Survey Question Generator
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Browse our collection of professionally crafted survey questions. Copy and use them for your research, feedback collection, or customer insights.
+            Browse our collection of professionally crafted survey questions.
+            Copy and use them for your research, feedback collection, or
+            customer insights.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {surveyCategories.map((category) => (
-            <CategoryCard key={category.slug} category={category} />
-          ))}
-        </div>
+        {categoryGroups.map((group, index) => (
+          <CategoryGroup
+            key={group.name}
+            name={group.name}
+            description={group.description}
+            color={group.color}
+            categories={surveyCategories.filter((cat) =>
+              group.categories.includes(cat.slug as never)
+            )}
+            index={index}
+          />
+        ))}
       </div>
     </div>
   );

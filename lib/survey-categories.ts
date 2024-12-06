@@ -27,6 +27,75 @@ import {
   Headphones,
 } from "lucide-react";
 
+export const categoryGroups = [
+  {
+    name: "Customer Insights",
+    description: "Understand and improve customer experiences",
+    color: "blue",
+    categories: [
+      "feedback-questions",
+      "customer-experience-questions",
+      "customer-service-questions",
+      "customer-loyalty-program",
+      "voice-of-customer",
+    ],
+  },
+  {
+    name: "Product & UX",
+    description: "Optimize your products and digital experiences",
+    color: "purple",
+    categories: [
+      "product-survey-questions",
+      "user-experience-questions",
+      "website-usability",
+      "mobile-app-experience",
+    ],
+  },
+  {
+    name: "Business & Marketing",
+    description: "Enhance your business operations and market presence",
+    color: "amber",
+    categories: [
+      "brand-perception-questions",
+      "market-research-questions",
+      "marketing-campaign",
+      "sales-performance",
+    ],
+  },
+  {
+    name: "Workplace & HR",
+    description: "Improve employee satisfaction and workplace culture",
+    color: "emerald",
+    categories: [
+      "employee-satisfaction-questions",
+      "training-evaluation-questions",
+      "remote-work-survey",
+      "diversity-inclusion-survey",
+    ],
+  },
+  {
+    name: "Industry Specific",
+    description: "Specialized surveys for different sectors",
+    color: "rose",
+    categories: [
+      "education-feedback-questions",
+      "healthcare-experience-questions",
+      "event-feedback-questions",
+    ],
+  },
+  {
+    name: "Innovation & Growth",
+    description: "Drive innovation and sustainable growth",
+    color: "cyan",
+    categories: [
+      "digital-transformation-survey",
+      "innovation-feedback",
+      "sustainability-practices",
+      "process-improvement",
+    ],
+  },
+] as const;
+
 export const surveyCategories = [
   {
     title: "Feedback Questions",
@@ -230,6 +299,16 @@ export const surveyCategories = [
       "Create surveys to measure loyalty program satisfaction, benefits usage, and member retention.",
   },
   {
+    title: "Voice of Customer",
+    description: "Capture direct customer feedback and insights",
+    icon: Headphones,
+    slug: "voice-of-customer",
+    count: "35+ questions",
+    metaTitle: "Voice of Customer Survey Questions | Customer Feedback",
+    metaDescription:
+      "Generate questions to collect comprehensive customer feedback, preferences, and pain points directly from your users.",
+  },
+  {
     title: "Website Usability",
     description: "Assess website user experience and functionality",
     icon: Monitor,
@@ -238,16 +317,6 @@ export const surveyCategories = [
     metaTitle: "Website Usability Survey Questions | UX Assessment",
     metaDescription:
       "Generate questions to evaluate website usability, navigation, and user satisfaction.",
-  },
-  {
-    title: "Community Engagement",
-    description: "Measure community involvement and impact",
-    icon: Users2,
-    slug: "community-engagement",
-    count: "25+ questions",
-    metaTitle: "Community Engagement Survey Questions | Impact Assessment",
-    metaDescription:
-      "Create surveys to evaluate community engagement, event participation, and local impact.",
   },
   {
     title: "Process Improvement",
@@ -303,3 +372,12 @@ export const surveyCategories = [
 
 export type SurveyCategory = (typeof surveyCategories)[number];
 export type SurveyCategorySlug = SurveyCategory["slug"];
+
+export function getCategoryColor(slug: string): string {
+  for (const group of categoryGroups) {
+    if (group.categories.includes(slug as never)) {
+      return group.color;
+    }
+  }
+  return "gray";
+}

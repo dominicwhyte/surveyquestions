@@ -227,6 +227,18 @@ export const defaultQuestions: { [key: string]: string[] } = {
     "What content topics interest you?",
     "How can we improve our social presence?",
   ],
+  "voice-of-customer": [
+    "What made you choose our product?",
+    "How well do we meet your needs?",
+    "What improvements would you suggest?",
+    "What's your biggest frustration?",
+    "How likely are you to recommend us?",
+    "What's most valuable to you?",
+    "What features are missing?",
+    "How can we serve you better?",
+    "What alternatives did you consider?",
+    "What would make you a loyal customer?",
+  ],
   "customer-loyalty-program": [
     "How valuable are our rewards?",
     "How often do you use rewards?",

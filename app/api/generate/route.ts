@@ -16,6 +16,21 @@ export async function POST(req: Request) {
     long: "14-20 words",
   };
 
+  const languageMap: { [key: string]: string } = {
+    en: "English",
+    es: "Spanish",
+    fr: "French",
+    de: "German",
+    it: "Italian",
+    pt: "Portuguese",
+    nl: "Dutch",
+    pl: "Polish",
+    ru: "Russian",
+    ja: "Japanese",
+    ko: "Korean",
+    zh: "Chinese (Simplified)",
+  };
+
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     stream: true,
@@ -35,7 +50,9 @@ export async function POST(req: Request) {
                      settings.length as keyof typeof lengthInstructions
                    ]
                  } in length
-                 - Questions should be in ${settings.language}
+                 - Questions MUST be in ${
+                   languageMap[settings.language] || "English"
+                 }
                  - Questions should be clear and focused
                  - Avoid compound questions
                  
@@ -47,7 +64,9 @@ export async function POST(req: Request) {
       },
       {
         role: "user",
-        content: `Generate ${settings.questionCount} ${category} survey questions about "${topic}".`,
+        content: `Generate ${settings.questionCount} ${category} survey questions about "${topic}" in ${
+          languageMap[settings.language] || "English"
+        }.`,
       },
     ],
     temperature: 0.7,
