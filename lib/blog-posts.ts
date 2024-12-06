@@ -5,7 +5,7 @@ export interface BlogPost {
   title: string;
   description: string;
   date: string;
-  author: Author;
+  author: string;
   content: string;
   readingTime: string;
   category: "survey-design" | "response-rates" | "analysis" | "methodology";
@@ -16,12 +16,18 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "survey-response-rates-ultimate-guide",
     title: "The Ultimate Guide to Increasing Survey Response Rates in 2024",
-    description: "Learn proven strategies to boost survey participation rates with practical tips, examples, and best practices for higher engagement.",
+    description:
+      "Learn proven strategies to boost survey participation rates with practical tips, examples, and best practices for higher engagement.",
     date: "2024-03-20",
     author: "sarah-miller",
     readingTime: "8 min read",
     category: "response-rates",
-    tags: ["response rates", "survey engagement", "participation", "survey optimization"],
+    tags: [
+      "response rates",
+      "survey engagement",
+      "participation",
+      "survey optimization",
+    ],
     content: `
 # The Ultimate Guide to Increasing Survey Response Rates
 
@@ -163,12 +169,13 @@ Before diving into strategies, it's important to understand what constitutes a g
 ## Conclusion
 
 Remember: The key to high response rates is respecting your respondents' time while clearly communicating the value of their participation. By implementing these strategies systematically and measuring their impact, you can significantly improve your survey response rates and gather more valuable data.
-    `
+    `,
   },
   {
     slug: "writing-unbiased-survey-questions",
     title: "How to Write Unbiased Survey Questions: A Complete Framework",
-    description: "Master the art of crafting neutral, effective survey questions that yield reliable data and insights.",
+    description:
+      "Master the art of crafting neutral, effective survey questions that yield reliable data and insights.",
     date: "2024-03-18",
     author: "david-chen",
     readingTime: "6 min read",
@@ -299,12 +306,14 @@ Survey question bias can significantly impact your data quality. Learn how to id
 ## Conclusion
 
 Remember: The goal is to collect accurate, actionable data that truly represents your respondents' views. By following these guidelines and regularly testing your questions, you can create surveys that minimize bias and maximize data quality.
-    `
+    `,
   },
   {
     slug: "survey-data-analysis-techniques",
-    title: "Advanced Survey Data Analysis: From Raw Data to Actionable Insights",
-    description: "Learn how to analyze survey data effectively using statistical methods and visualization techniques to uncover meaningful patterns.",
+    title:
+      "Advanced Survey Data Analysis: From Raw Data to Actionable Insights",
+    description:
+      "Learn how to analyze survey data effectively using statistical methods and visualization techniques to uncover meaningful patterns.",
     date: "2024-03-15",
     author: "sarah-miller",
     readingTime: "10 min read",
@@ -430,17 +439,23 @@ Before diving into analysis, it's crucial to understand your data structure and 
 ## Conclusion
 
 Remember: The goal of survey analysis is not just to understand what happened, but to provide actionable insights that drive decision-making. Focus on finding meaningful patterns and communicating them effectively to stakeholders.
-    `
+    `,
   },
   {
     slug: "survey-question-types-guide",
     title: "The Complete Guide to Survey Question Types and When to Use Them",
-    description: "Explore different types of survey questions and learn when to use each type for maximum effectiveness and data quality.",
+    description:
+      "Explore different types of survey questions and learn when to use each type for maximum effectiveness and data quality.",
     date: "2024-03-12",
     author: "david-chen",
     readingTime: "7 min read",
     category: "survey-design",
-    tags: ["question types", "survey design", "methodology", "response formats"],
+    tags: [
+      "question types",
+      "survey design",
+      "methodology",
+      "response formats",
+    ],
     content: `
 # Survey Question Types and Their Applications
 
@@ -563,12 +578,14 @@ Different question types serve different purposes in surveys. This comprehensive
 ## Conclusion
 
 Choose question types based on your research objectives, audience, and analysis needs. Remember that the right question type can significantly impact response quality and completion rates.
-    `
+    `,
   },
   {
     slug: "survey-distribution-strategies",
-    title: "Survey Distribution Strategies: Maximizing Reach and Response Quality",
-    description: "Learn effective strategies for distributing surveys across different channels while maintaining data quality and representative samples.",
+    title:
+      "Survey Distribution Strategies: Maximizing Reach and Response Quality",
+    description:
+      "Learn effective strategies for distributing surveys across different channels while maintaining data quality and representative samples.",
     date: "2024-03-10",
     author: "sarah-miller",
     readingTime: "9 min read",
@@ -692,6 +709,6 @@ Choosing the right distribution channels is crucial for reaching your target aud
 ## Conclusion
 
 Effective survey distribution requires a balanced approach across channels, careful audience targeting, and robust quality control measures. Focus on creating a strategy that reaches your audience while maintaining data quality and cost efficiency.
-    `
-  }
+    `,
+  },
 ];
