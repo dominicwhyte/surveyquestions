@@ -15,9 +15,8 @@ export default function Home() {
             Survey Question Generator
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Browse our collection of professionally crafted survey questions.
-            Copy and use them for your research, feedback collection, or
-            customer insights.
+            Browse hundreds of survey questions. Each template follows survey
+            methodology best practices to help you gather meaningful insights.
           </p>
         </div>
 

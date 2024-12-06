@@ -200,7 +200,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = params?.slug as SurveyCategorySlug;
   const category = surveyCategories.find((c) => c.slug === slug);
-  const initialQuestions = getRandomQuestions(slug);
+  const initialQuestions = defaultQuestions[slug] || [];
   const categoryTitle = formatSlug(slug);
 
   return {
